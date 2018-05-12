@@ -10,7 +10,7 @@ import { ViewProperties } from "react-native";
     onStrokeStart(): void
     onStrokeChanged(): void
     onStrokeEnd(): void
-    onSketchSaved(result: boolean): void
+    onSketchSaved(result: boolean, path: string): void
     onPathsChange(pathsCount: any): void
   }
 
