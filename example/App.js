@@ -191,6 +191,17 @@ export default class example extends Component {
                 </TouchableOpacity>
                 <View style={{flexDirection: 'row'}}>
                   <TouchableOpacity style={styles.functionButton} onPress={() => {
+                    const p = { 
+                      folder: 'RNSketchCanvas',
+                      filename: String(Math.ceil(Math.random() * 100000000)),
+                      transparent: true,
+                      imageType: 'jpg'
+                    }
+                    this.canvas.save(p.imageType, p.transparent, p.folder ? p.folder : '', p.filename, p.localFilePath)
+                  }}>
+                    <Text style={{color: 'white'}}>Save</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.functionButton} onPress={() => {
                     this.setState({ thickness: 10 })
                   }}>
                     <Text style={{color: 'white'}}>Thick</Text>
@@ -218,6 +229,10 @@ export default class example extends Component {
                 }}
                 onPathsChange={(pathsCount) => {
                   console.log('pathsCount', pathsCount)
+                }}
+                onSketchSaved={success => {
+                  Alert.alert('Image saved!')
+                  // Alert.alert(String(success))
                 }}
               />
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
