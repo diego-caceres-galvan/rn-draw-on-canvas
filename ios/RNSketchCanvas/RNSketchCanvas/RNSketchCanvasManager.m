@@ -42,32 +42,6 @@ RCT_CUSTOM_VIEW_PROPERTY(localSourceImagePath, NSString, RNSketchCanvas)
 {
     if (!self.sketchCanvasView) {
         self.sketchCanvasView = [[RNSketchCanvas alloc] initWithEventDispatcher: self.bridge.eventDispatcher];
-        
-//        NSString * path1 = @"/Users/diegocaceres/Library/Developer/CoreSimulator/Devices/B3AF1207-928D-4653-A66A-45D23246E0F1/data/Containers/Data/Application/966FDCD3-BBE0-462F-85AC-EDCF7D11D52B/Library/Caches/Camera/41374802-C140-4869-9EDE-38E6E47E0795.jpg";
-//        NSString * path2 = @"file:///Users/diegocaceres/Library/Developer/CoreSimulator/Devices/B3AF1207-928D-4653-A66A-45D23246E0F1/data/Containers/Data/Application/966FDCD3-BBE0-462F-85AC-EDCF7D11D52B/Library/Caches/Camera/41374802-C140-4869-9EDE-38E6E47E0795.jpg";
-//        UIImage *image1 = [UIImage imageWithContentsOfFile:path1];
-//        UIImage *image2 = [UIImage imageWithContentsOfFile:path2];
-        
-//        NSString * MyURL = @"https://i.pinimg.com/736x/8f/a9/11/8fa911b42d3de9b5cb949507c80dc928--senior-pics-water-cute-senior-pictures-poses.jpg";
-
-//        UIImage *image1 = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:MyURL]]];
-        
-//        if(image1) {
-//            [self.sketchCanvasView setViewImage:image1];
-//        }
-        
-//        // /Users/diegocaceres/Library/Developer/CoreSimulator/Devices/B3AF1207…2240A847178/Library/Caches/Camera/6959E903-D9C1-415C-97B4-93E2D1389052.jpg
-//        NSString * path = @"assets-library://asset/asset.JPG?id=0866602D-6A30-44AD-9569-F075F818321B&ext=JPG";
-//        UIImage *image = [UIImage imageWithContentsOfFile:path];
-//        NSString * path2 = @"/asset/asset.JPG?id=0866602D-6A30-44AD-9569-F075F818321B&ext=JPG";
-//        UIImage *image2 = [UIImage imageWithContentsOfFile:path2];
-//        NSString * path3 = @"/assets-library://asset/asset.JPG?id=0866602D-6A30-44AD-9569-F075F818321B&ext=JPG";
-//        UIImage *image3 = [UIImage imageWithContentsOfFile:path3];
-//        if(image) {
-//            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
-//            [imageView setImage:image];
-//            [self.sketchCanvasView addSubview:imageView]; // edited for syntax
-//        }
     }
 
     return self.sketchCanvasView;
@@ -78,12 +52,6 @@ RCT_CUSTOM_VIEW_PROPERTY(localSourceImagePath, NSString, RNSketchCanvas)
 
 RCT_EXPORT_METHOD(save:(NSString*) type withTransparentBackground:(BOOL) transparent path:(NSString*) localFilePath)
 {
-//    NSString * path = @"/Users/diegocaceres/Library/Developer/CoreSimulator/Devices/B3AF1207-928D-4653-A66A-45D23246E0F1/data/Containers/Data/Application/773ACF2D-B10F-47F4-B00B-6C572F1D6CEA/Library/Caches/Camera/B6B8FADA-3917-4951-A8B9-87938FA1C247.jpg";
-//    UIImage *image = [UIImage imageWithContentsOfFile:localFilePath];
-//    if(image) {
-//        [self.sketchCanvasView setViewImage:image];
-//    }
-    
     [self.sketchCanvasView saveImageOfType: type withTransparentBackground: transparent];
 }
 

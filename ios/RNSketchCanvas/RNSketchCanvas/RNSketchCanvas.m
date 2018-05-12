@@ -17,7 +17,7 @@
     RNSketchCanvasDelegate *delegate;
     
     //d
-    UIImage *incrementalImage;
+    UIImage *backgroundImage;
 }
     
 //d
@@ -25,18 +25,12 @@
 {
     UIImage *image = [UIImage imageWithContentsOfFile:localFilePath];
     if(image) {
-        incrementalImage = image;
-        //[self.sketchView setViewImage:image];
-        //[self.sketchView setViewImagePath: localFilePath];
+        backgroundImage = image;
+        [self setNeedsDisplay];
+        
         return YES;
     }
     return NO;
-}
-
-//d
--(void)setViewImage:(UIImage *)image
-{
-    incrementalImage = image;
 }
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
@@ -132,10 +126,8 @@
     // This was changed so that it didn't leave a white border on the side
     //CGRect rect = self.frame;
     CGRect rect = self.bounds;
-    UIImage *_originalImage = incrementalImage;
-    
-    //We dont use the original image size because the drawing is place wrongly if we do that.
-    //UIGraphicsBeginImageContext(_originalImage.size);
+    UIImage *_originalImage = backgroundImage;
+  
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef _context = UIGraphicsGetCurrentContext();
     [_originalImage drawInRect:CGRectMake(0.f, 0.f, rect.size.width, rect.size.height)];
@@ -150,22 +142,17 @@
     UIImage* img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    NSURL *tempDir = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+    NSString *fileName = [NSString stringWithFormat:@"kudos%@.jpeg", [[NSUUID UUID] UUIDString]];
+    NSURL *fileURL = [tempDir URLByAppendingPathComponent:fileName];
     
-    //This was the original Code, but didnt draw the back image
-//    UIGraphicsBeginImageContextWithOptions(rect.size, !transparent, 0);
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//
-//    if ([type isEqualToString: @"png"] && !transparent) {
-//        CGContextSetRGBFillColor(context, 1.0f, 1.0f, 1.0f, 1.0f);
-//        CGContextFillRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
-//    }
-//    [_layer renderInContext:context];
-//    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-    if ([type isEqualToString: @"jpg"]) {
-        UIImageWriteToSavedPhotosAlbum(img, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-    } else {
-        UIImageWriteToSavedPhotosAlbum([UIImage imageWithData: UIImagePNGRepresentation(img)], self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+    NSLog(@"fileURL: %@", [fileURL path]);
+    
+    NSData *imageData = UIImageJPEGRepresentation(img,  1.0);
+    [imageData writeToURL:fileURL atomically:YES];
+    
+    if (_onChange) {
+        _onChange(@{ @"success": @YES, @"path": [fileURL path]});
     }
 }
 
@@ -173,9 +160,12 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     //CGSize size = CGSizeMake(rect.size.width, rect.size.height);
-    UIImage * scaled = [self scaleImage: incrementalImage toSize:rect.size];
-    // Drawing code
-    [scaled drawInRect:rect];
+    if(backgroundImage != nil) {
+        UIImage * scaled = [self scaleImage: backgroundImage toSize:rect.size];
+        // Drawing code
+        [scaled drawInRect:rect];
+    }
+    
 }
 
 - (NSString*) transferToBase64OfType: (NSString*) type withTransparentBackground: (BOOL) transparent {

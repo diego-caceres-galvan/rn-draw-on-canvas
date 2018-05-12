@@ -235,8 +235,8 @@ class SketchCanvas extends React.Component {
         onChange={(e) => {
           if (e.nativeEvent.hasOwnProperty('pathsUpdate')) {
             this.props.onPathsChange(e.nativeEvent.pathsUpdate)
-          } else if (e.nativeEvent.hasOwnProperty('success')) {
-            this.props.onSketchSaved(e.nativeEvent.success)
+          } else if (e.nativeEvent.hasOwnProperty('success') && e.nativeEvent.hasOwnProperty('path')) {
+            this.props.onSketchSaved(e.nativeEvent.success, e.nativeEvent.path)
           }
         }}
         localSourceImagePath={this.props.localSourceImagePath}
