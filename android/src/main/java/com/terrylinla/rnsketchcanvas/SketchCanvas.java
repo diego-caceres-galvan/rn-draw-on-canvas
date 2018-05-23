@@ -106,9 +106,10 @@ public class SketchCanvas extends View {
         }
     }
 
-    public void onSaved(boolean success) {
+    public void onSaved(boolean success, String path) {
         WritableMap event = Arguments.createMap();
         event.putBoolean("success", success);
+        event.putString("path", path);
         mContext.getJSModule(RCTEventEmitter.class).receiveEvent(
             getId(),
             "topChange",
@@ -143,14 +144,14 @@ public class SketchCanvas extends View {
                     format.equals("png") ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG,
                     format.equals("png") ? 100 : 90,
                     new FileOutputStream(file));
-                this.onSaved(true);
+                this.onSaved(true, file.getPath());
             } catch (Exception e) {
                 e.printStackTrace();
-                this.onSaved(false);
+                this.onSaved(false, "");
             }
         } else {
             Log.e("SketchCanvas", "Failed to create folder!");
-            this.onSaved(false);
+            this.onSaved(false, "");
         }
     }
 
