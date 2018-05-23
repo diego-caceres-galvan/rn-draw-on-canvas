@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.facebook.common.logging.FLog;
@@ -38,6 +39,8 @@ public class SketchCanvasManager extends SimpleViewManager<SketchCanvas> {
 
     public static SketchCanvas Canvas = null;
 
+    private static final String PROPS_IMAGE_PATH = "localSourceImagePath";
+
     @Override
     public String getName() {
         return "RNSketchCanvas";
@@ -47,6 +50,11 @@ public class SketchCanvasManager extends SimpleViewManager<SketchCanvas> {
     protected SketchCanvas createViewInstance(ThemedReactContext context) {
         SketchCanvasManager.Canvas = new SketchCanvas(context);
         return SketchCanvasManager.Canvas;
+    }
+
+    @ReactProp(name = PROPS_IMAGE_PATH)
+    public void setLocalSourceImagePath(SketchCanvas viewContainer, @NonNull String localSourceImagePath) {
+        viewContainer.openImageFile(localSourceImagePath);
     }
 
     @Override

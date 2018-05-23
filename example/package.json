@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "cleanA": "cd android && ./gradlew clean && cd .."
   },
   "dependencies": {
     "rn-draw-on-canvas": "file:..",

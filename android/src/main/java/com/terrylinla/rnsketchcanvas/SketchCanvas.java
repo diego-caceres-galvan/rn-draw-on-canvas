@@ -5,6 +5,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.view.View;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -30,10 +32,31 @@ public class SketchCanvas extends View {
     private SketchData _currentPath = null;
 
     private ThemedReactContext mContext;
+    private int mOriginalWidth;
+    private int mOriginalHeight;
+    Bitmap backgroundImage;
+    String originalImagePath;
 
     public SketchCanvas(ThemedReactContext context) {
         super(context);
         mContext = context;
+    }
+
+    public boolean openImageFile(String localFilePath) {
+
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(localFilePath, bitmapOptions);
+        if(bitmap != null) {
+            backgroundImage = bitmap;
+            originalImagePath = localFilePath;
+            mOriginalHeight = bitmap.getHeight();
+            mOriginalWidth = bitmap.getWidth();
+
+            invalidateCanvas(true);
+
+            return true;
+        }
+        return false;
     }
 
     public void clear() {
@@ -104,12 +127,19 @@ public class SketchCanvas extends View {
             } else {
                 canvas.drawARGB(255, 255, 255, 255);
             }
+            if(backgroundImage != null) {
+                Rect dstRect = new Rect();
+                canvas.getClipBounds(dstRect);
+                canvas.drawBitmap(backgroundImage, null, dstRect, null);
+            }
             this.drawPath(canvas);
+
+            Bitmap viewBitmapOriginalSize = Bitmap.createScaledBitmap(bitmap, mOriginalWidth, mOriginalHeight, false);
 
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
                 File.separator + folder + File.separator + filename + (format.equals("png") ? ".png" : ".jpg"));
             try {
-                bitmap.compress(
+                viewBitmapOriginalSize.compress(
                     format.equals("png") ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG,
                     format.equals("png") ? 100 : 90,
                     new FileOutputStream(file));
@@ -152,6 +182,12 @@ public class SketchCanvas extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if(backgroundImage != null) {
+            //canvas.drawBitmap(incrementalImage, getLeft(), getTop(), null);
+            Rect dstRect = new Rect();
+            canvas.getClipBounds(dstRect);
+            canvas.drawBitmap(backgroundImage, null, dstRect, null);
+        }
         this.drawPath(canvas);
     }
 
