@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/diego-caceres-galvan/rn-draw-on-canvas.git"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "rn-draw-on-canvas allows you to draw / sketch on both iOS and Android devices.",
   "author": "",
   "main": "index.js",
